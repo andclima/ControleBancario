@@ -6,10 +6,14 @@ public class ContaBancaria {
     private String nome;
     private BigDecimal saldo;
     
-    public ContaBancaria(String numero, String nome) {
+    public ContaBancaria(String numero, String nome, BigDecimal saldo) {
         this.numero = numero;
         this.nome = nome;
-        this.saldo = BigDecimal.ZERO;
+        this.saldo = saldo;
+    }
+
+    public ContaBancaria(String numero, String nome) {
+        this(numero, nome, BigDecimal.ZERO);
     }
 
     public String getNumero() {
@@ -32,16 +36,16 @@ public class ContaBancaria {
         return saldo;
     }
 
-    public void depositar(BigDecimal valor) throws Exception {
+    public void depositar(BigDecimal valor) throws ValorInvalidoException {
         if (valor.compareTo(BigDecimal.ZERO) < 0) {
-            throw new Exception("Valor negativo");
+            throw new ValorInvalidoException();
         }
         this.saldo = this.saldo.add(valor);
     }
 
     public void sacar(BigDecimal valor) throws SaldoInsuficienteException {
         if (valor.compareTo(this.saldo) > 0) {
-            throw new SaldoInsuficienteException("Saldo insuficiente");
+            throw new SaldoInsuficienteException();
         }
         this.saldo = this.saldo.subtract(valor);
     }

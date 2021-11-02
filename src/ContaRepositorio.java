@@ -44,7 +44,7 @@ public class ContaRepositorio {
             pstm.executeUpdate();
             pstm.close();
         } catch (SQLException ex) {
-        System.out.println("Erro na exclusão da conta!");
+            System.out.println("Erro na exclusão da conta!");
         }
     }
 

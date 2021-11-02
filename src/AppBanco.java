@@ -1,9 +1,7 @@
 import java.util.List;
 
 public class AppBanco {
-    
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello world!");
         
         ContaRepositorio repo = new ContaRepositorio();
 
