@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -69,7 +70,12 @@ public class FormConta extends JFrame implements ActionListener {
         pnlNovaConta = new JPanel();
         pnlNovaConta.setBorder(BorderFactory.createEtchedBorder());
 
-        model = new DefaultTableModel();
+        model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         model.addColumn("Número");
         model.addColumn("Nome");
         model.addColumn("Saldo");
@@ -80,6 +86,10 @@ public class FormConta extends JFrame implements ActionListener {
         tblConta.getColumnModel().getColumn(2).setPreferredWidth(100);
         tblConta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollTable = new JScrollPane(tblConta);
+
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        tblConta.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
 
         lblContas.setBounds(20, 5, 100, 25);
         scrollTable.setBounds(20, 35, 540, 300);
