@@ -16,9 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
-
-
 public class FormConta extends JFrame implements ActionListener {
 
     private final ContaRepositorio repositorio;
