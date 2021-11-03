@@ -21,7 +21,7 @@ public class Conexao {
         return conexao;
     }
 
-    public static void fecharConexao() {
+    public static void fechar() {
         if (conexao != null) {
             try {
                 conexao.close();

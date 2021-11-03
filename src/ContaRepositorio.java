@@ -1,6 +1,5 @@
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,19 +8,10 @@ import java.util.List;
 
 public class ContaRepositorio {
 
-    private final String URL_DATABASE = "jdbc:postgresql://kesavan.db.elephantsql.com/pjrkwanq";
-    private final String USER_DATABASE = "pjrkwanq";
-    private final String PASSWORD_DATABASE = "7SsnBMygm54VuJ2sbnUu4aMNSfnNL_5j";
+    private final Connection conn;
 
-    private Connection conn;
-
-    public ContaRepositorio() {
-        try {
-            conn = DriverManager.getConnection(URL_DATABASE, USER_DATABASE, PASSWORD_DATABASE);
-        }
-        catch (SQLException ex) {
-            System.out.println("Erro na conexão!");
-        }
+    public ContaRepositorio(Connection conn) {
+        this.conn = conn;
     }
 
     public void adicionar(ContaBancaria conta) {
@@ -64,12 +54,13 @@ public class ContaRepositorio {
     public List<ContaBancaria> pesquisar() {
         ArrayList<ContaBancaria> lista = new ArrayList<>();
         try {
-            PreparedStatement pstm = conn.prepareStatement("select * from ContaBancaria");
+            PreparedStatement pstm = conn.prepareStatement("select * from ContaBancaria order by numero");
             ResultSet rsConta = pstm.executeQuery();
             while (rsConta.next()) {
                 String numero = rsConta.getString("numero");
                 String nome = rsConta.getString("nome");
-                ContaBancaria nova = new ContaBancaria(numero, nome);
+                BigDecimal saldo = rsConta.getBigDecimal("saldo");
+                ContaBancaria nova = new ContaBancaria(numero, nome, saldo);
                 lista.add(nova);
             }
             rsConta.close();
@@ -80,7 +71,7 @@ public class ContaRepositorio {
         return lista;
     }
 
-    public ContaBancaria pesquisar(String numero) throws Exception {
+    public ContaBancaria pesquisar(String numero) {
         ContaBancaria contaEncontrada = null;
         try {
             PreparedStatement pstm = conn.prepareStatement("select * from ContaBancaria where numero = ?");
@@ -90,8 +81,7 @@ public class ContaRepositorio {
                 String num = rs.getString("numero");
                 String nome = rs.getString("nome");
                 BigDecimal saldo = rs.getBigDecimal("saldo");
-                contaEncontrada = new ContaBancaria(num, nome);
-                contaEncontrada.depositar(saldo);
+                contaEncontrada = new ContaBancaria(num, nome, saldo);
             }
         } catch (SQLException ex) {
             System.out.println("Erro na pesquisa de conta!");
@@ -99,12 +89,4 @@ public class ContaRepositorio {
         return contaEncontrada;
     }
 
-    public void fecharConexao() {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println("Erro no fechamento da conexão!");
-        }
-    }
-    
 }

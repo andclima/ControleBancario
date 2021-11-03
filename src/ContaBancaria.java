@@ -43,7 +43,10 @@ public class ContaBancaria {
         this.saldo = this.saldo.add(valor);
     }
 
-    public void sacar(BigDecimal valor) throws SaldoInsuficienteException {
+    public void sacar(BigDecimal valor) throws SaldoInsuficienteException, ValorInvalidoException {
+        if (valor.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ValorInvalidoException();
+        }
         if (valor.compareTo(this.saldo) > 0) {
             throw new SaldoInsuficienteException();
         }
